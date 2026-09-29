@@ -27,15 +27,20 @@ gh repo view 9liforeverloves-lgtm/decision-relevance-uncertainty-calibration --j
 
 Never use `--force` or overwrite unrelated history. Inspect the remote branch before publishing if local and remote histories diverge.
 
-## Create the reviewed release
+## Published initial release
 
-Only after the public-file and content audits pass:
+The initial `v1.0.0-rc1` prerelease is already published at https://github.com/9liforeverloves-lgtm/decision-relevance-uncertainty-calibration/releases/tag/v1.0.0-rc1. Do not rerun the initial tag/release commands.
+
+## Create a later release
+
+For a future version, first update the version and release date in `CITATION.cff`, prepare notes that describe that version, review all public files, regenerate the hashes, and push the reviewed `main` branch. Then choose a new tag (never reuse `v1.0.0-rc1`) and run:
 
 ```powershell
-git tag -a v1.0.0-rc1 -m "MLST submission release candidate"
-git push origin v1.0.0-rc1
-gh release create v1.0.0-rc1 --title "MLST submission release candidate" --notes-file docs/RELEASE_NOTES_v1.0.0-rc1.md
-gh release view v1.0.0-rc1 --json tagName,name,url,isDraft
+$nextTag = 'v1.0.1'
+git tag -a $nextTag -m "Reproducibility release"
+git push origin $nextTag
+gh release create $nextTag --verify-tag --title "Reproducibility release" --notes-file "docs/RELEASE_NOTES_$nextTag.md"
+gh release view $nextTag --json tagName,name,url,isDraft,isPrerelease
 ```
 
 Do not add or claim a DOI unless a later Zenodo deposit has issued one. See `docs/ZENODO_DEPOSIT_STEPS.md` for the optional archive workflow.
