@@ -1,0 +1,9 @@
+task,split,rank_mean_delta,rank_positive_seeds,rank_n_seeds,magnitude_mean_delta,magnitude_positive_seeds,magnitude_n_seeds
+matbench_expt_gap,chemical_system_ood,0.008237092391304345,22,40,0.008190993788819882,26,40
+matbench_expt_gap,iid_record,0.015645218685300208,27,40,0.012559038561076619,27,40
+matbench_log_gvrh,chemical_system_ood,0.03279619027911897,25,40,0.02493433002253182,25,40
+matbench_log_gvrh,iid_record,0.030444465504169828,29,40,0.021459812300411257,27,40
+matbench_log_kvrh,chemical_system_ood,0.0638230273141123,29,40,0.03498327355497311,29,40
+matbench_log_kvrh,iid_record,0.07364581179497783,34,40,0.024639591517908434,26,40
+matbench_mp_gap,chemical_system_ood,-0.03465165384997555,9,40,-0.009286035124201768,16,40
+matbench_mp_gap,iid_record,-0.03823204541136573,3,40,-0.0019543110455643776,17,40

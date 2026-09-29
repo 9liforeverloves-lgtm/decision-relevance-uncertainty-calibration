@@ -1,0 +1,27 @@
+\setlength{\tabcolsep}{3.5pt}
+\scriptsize
+\begin{longtable}{@{}llrrrrr@{}}
+\caption{Exploratory V2 candidate-level diagnostics for matbench\_mp\_gap.}\label{tab:v2_mp_gap_diagnostics}\\
+\toprule
+Split & Policy & Condition & $\nho(\sigma_c,|\epsilon|)$ & Mean rank shift & Top-5\% $\sigma$ ratio & Entrant tail (\%) \\
+\midrule
+\endfirsthead
+\caption[]{Exploratory V2 candidate-level diagnostics for matbench\_mp\_gap. (continued)}\\
+\toprule
+Split & Policy & Condition & $\nho(\sigma_c,|\epsilon|)$ & Mean rank shift & Top-5\% $\sigma$ ratio & Entrant tail (\%) \\
+\midrule
+\endhead
+\midrule\multicolumn{7}{r}{Continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+IID & Rank & RAW & 0.759 & 1948.2 & 2.050 & 18.1 \\
+IID & Rank & LOCAL & 0.747 & 2068.8 & 1.944 & 16.8 \\
+IID & Magnitude & RAW & 0.758 & 1613.3 & 2.347 & 14.6 \\
+IID & Magnitude & LOCAL & 0.750 & 1611.2 & 2.176 & 13.7 \\
+Chem. OOD & Rank & RAW & 0.699 & 2285.7 & 1.593 & 17.4 \\
+Chem. OOD & Rank & LOCAL & 0.686 & 2525.5 & 1.538 & 15.4 \\
+Chem. OOD & Magnitude & RAW & 0.693 & 2002.2 & 1.714 & 13.6 \\
+Chem. OOD & Magnitude & LOCAL & 0.687 & 1979.3 & 1.617 & 13.5 \\
+\end{longtable}
+\noindent\footnotesize Rows summarize 80 run stages (20 seeds $\times$ four stages) with equal stage weighting. $\nho(\sigma_c,|\epsilon|)$ is Spearman correlation between corrected uncertainty and absolute prediction error; mean rank shift compares counterfactual RAW and LOCAL candidate ranks. The Top-5\% ratio is the ratio of mean stage medians for corrected uncertainty among target-pool top-5\% candidates versus other candidates. Entrant tail is the fraction of LOCAL-only batch entrants in the top-5\% target tail. These retrospective diagnostics are exploratory and do not establish a causal mechanism.

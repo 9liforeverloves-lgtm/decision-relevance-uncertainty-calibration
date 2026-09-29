@@ -1,0 +1,338 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{setspace,microtype,graphicx,booktabs,tabularx,array,amsmath,amssymb,longtable}
+\usepackage[hidelinks]{hyperref}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{xspace}
+\usepackage[round,authoryear]{natbib}
+\setstretch{1.1}
+\setlength{\emergencystretch}{3em}
+\captionsetup{font=small,labelfont=bf}
+\newcommand{\Lfourq}{\ensuremath{L_{4,\mathrm{query}}}\xspace}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\title{Supplementary Information for\\
+Decision Relevance of Uncertainty Calibration in Active-Learning Materials Screening}
+\author{Renjie Li}
+\date{}
+
+\nenewcommand{\thefigure}{S\arabic{figure}}
+\nenewcommand{\thetable}{S\arabic{table}}
+\begin{document}
+\maketitle
+\sloppy
+
+\section{Scope and reproducibility provenance}
+This Supplementary Information documents the confirmation analysis used in the accompanying manuscript. The numerical authority is the D-drive D-only confirmation package generated on 25 September 2026. The package contains 3,216 JSON records corresponding to the complete four-task, two-split, 40-seed design. The validation report records 3,216 expected and 3,216 actual JSON files, with no missing or invalid records. The analysis manifest reports 577,298,134 bytes across the JSON records.
+
+The manuscript intentionally does not pool these results with earlier schedule or calibration analyses. Those historical outputs remain useful as project lineage, but their relation to the corrected acquisition semantics has not been re-established by a source-hash, configuration, and trajectory audit. They are therefore not evidence for the six primary contrasts in this manuscript. This separation prevents a numerical namespace generated under an earlier analysis path from being silently treated as part of the current confirmation.
+
+The frozen protocol signatures are:
+\begin{itemize}[leftmargin=*]
+\item analysis core SHA-256: {\scriptsize\texttt{84e364e6a6671f9b5ef3a563cb7c93fc1a321f01f05c64ce52a8277f50f72111}};
+\item experiment-plan SHA-256: {\scriptsize\texttt{3ae049e83417a8b3ee350e7b48dab88c1998ec4b129904183c571228c2f0c3ec}};
+\item confirmation-freeze SHA-256: {\scriptsize\texttt{c050f374796ed3d5a68819bb0d7b6b436947545ef48948b9ca29942d51760f88}};
+\item selected calibration interpolation exponent: \(\alpha=0.5\).
+\end{itemize}
+
+\section{Data partitions and campaign geometry}
+The four Matbench task suffixes were \code{expt\_gap}, \code{mp\_gap}, \code{log\_gvrh}, and \code{log\_kvrh}. This set was inherited from the frozen benchmark protocol; a separate pre-confirmation task-selection rationale is not recoverable from the archived materials. Each task used \code{iid\_record} and \code{chemical\_system\_ood} splits. The latter is a true group-disjoint chemical-system split under the inherited protocol; it was not replaced by an IID fallback or a capped approximation. The target pool contained no initially labelled target candidates, and unqueried target labels were unavailable to fitting and acquisition. Queried target labels were added to the labelled training set after each batch; the complete target labels were used only for retrospective endpoint evaluation.
+
+The surrogate was an 80-estimator extra-randomized tree ensemble with minimum leaf size two. The acquisition objective was maximization. Each campaign used the protocol-defined initial labelled set, four query batches, and a 20\% target-pool query budget. All conditions within a paired seed shared the same task, split, initial state, model fitting seeds, batch geometry, and stable identifier tie rule whenever the condition did not deliberately alter uncertainty assignment.
+
+\subsection{Feature representation and preprocessing}
+The surviving historical adapter documents Pymatgen composition featurization: parse formulae with \texttt{pymatgen.core.Composition}, construct a lexicographically sorted element vocabulary for the task, encode atomic fractions, and append total atom count and distinct-element count. Exact historical runtime identity remains unverified because the V5 source lock and feature cache are unavailable. In V2, Pymatgen 2024.10.29 \citep{ong2013pymatgen} produced dense float64 matrices with 83 columns for \code{matbench\_expt\_gap} and 86 for each remaining task. Missing values were filled with zero; non-finite values were rejected. No scaling, target transformation, feature selection, constant-feature removal, or categorical encoding was applied. The vocabulary used formulas across the complete unlabeled task snapshot before splitting, without reading targets; this is an unsupervised transductive schema step. No persistent feature cache was used. The per-task column names and matrix SHA-256 values are in the V2 data manifest.
+
+\section{Calibration implementation}
+At each campaign state, the labelled training set comprised the initial source labels and labels revealed by preceding target queries. Valid calibration rows required at least three OOB predictions, and the calibrator required at least eight valid rows. OOB ensemble predictions supplied \(\mu_j^{\mathrm{OOB}}\) and \(\sigma_j^{\mathrm{OOB}}\) for currently labelled candidates. The residual ratio was
+\begin{equation}
+ q_j=\frac{|y_j-\mu_j^{\mathrm{OOB}}|}{\max(\sigma_j^{\mathrm{OOB}},10^{-8})}.
+\end{equation}
+An ExtraTrees model with 64 estimators, minimum leaf size five, all available features, and a state-derived random seed fitted \(\log(q_j+10^{-8})\). Balanced five-fold OOF predictions were formed by a deterministic material-ID hash order. Writing \(g_j=\log(q_j+10^{-8})\), the local multiplier was
+\begin{equation}
+ c=\frac{\operatorname{median}\{q_j/\exp(\widehat{g}_j^{\mathrm{OOF}})\}}{0.67448975}.
+\end{equation}
+The corrected local scale for a candidate was \(s_{\mathrm{local}}(x)=c\exp(\widehat{g}(x))\), clipped to [0.25,4]. The positive global scale was \(s_{\mathrm{global}}=\max(10^{-8},\operatorname{median}(q_j)/0.67448975)\) over valid OOB rows; the implementation used the identity scale if fewer than eight valid rows were available. The local clipping precedes interpolation, so the final interpolated scale is not separately constrained to [0.25,4]. The confirmation scale was the geometric interpolation
+\begin{equation}
+ s_{\alpha}(x)=\exp\left[(1-\alpha)\log s_{\mathrm{global}}+\alpha\log s_{\mathrm{local}}(x)\night],\qquad \alpha=0.5.
+\end{equation}
+The development stage selected \(\alpha=0.5\) using fixed-state MACE and a prespecified tolerance rule. The confirmation endpoint was not used to select \(\alpha\), and no optional stopping was permitted.
+
+The historical local implementation is retained in the raw project for provenance but is not used for the current LOCAL claim. In the current namespace, \code{LOCAL} refers only to the corrected OOF implementation described above; \code{LEGACY\_LOCAL} is retained as a diagnostic condition and is not one of the six primary contrasts.
+
+\section{Acquisition conditions}
+The rank and magnitude scores were
+\begin{align}
+ A_{\mathrm{rank}}(x)&=r(\mu(x))+r(\sigma(x)),\\
+ A_{\mathrm{mag}}(x)&=\mu(x)+\sigma(x).
+\end{align}
+The rank function used average percentile ranks, and the selection order used stable material identifiers for deterministic tie resolution. RAW used the unmodified ensemble uncertainty. GLOBAL applied a positive constant to uncertainty and was included for magnitude acquisition as a control in the complete matrix, while the independent selected-ID identity check concerned rank acquisition.
+
+PERMUTED independently permuted the local scale vector within each seed and campaign stage. It therefore preserved the local-scale distribution but removed its candidate-specific allocation. MATCHED was defined separately for the two acquisition families. For magnitude acquisition, its scalar uncertainty weight matched the root-mean-square local uncertainty bonus to the raw bonus. For rank acquisition, a fixed grid searched for the weight whose next-batch disagreement from RAW matched the LOCAL-versus-RAW disagreement. The tie rule was closest to one, then lower weight. The residual matching gap was recorded in each run file.
+
+\section{Primary aggregation}
+For each condition, the run-level endpoint was \Lfourq. The analysis first formed paired differences within each task--split environment for each seed, then took the unweighted mean across the eight environments. The resulting 40 seed-level means were the only values used for primary inference. Run-file counts and environment-row counts are not substitute sample sizes.
+
+The six primary contrasts and their complete results are shown in Table~\nef{tab:full}. The archived plan records a descriptive practical threshold of 0.005 but does not preserve its scientific rationale; it is not an externally validated minimal important difference. Percentile bootstrap confidence intervals used 10,000 draws with seed 926900. Sign-flip p-values used 20,000 draws with seed 926901. Holm adjustment was applied across the six two-sided sign-flip tests.
+
+\begin{table}[ht]
+\centering
+\caption{Complete primary contrast summary.}
+\label{tab:full}
+\small
+\nesizebox{\linewidth}{!}{%
+\begin{tabular}{llrrrrrr}
+\toprule
+Rule & Contrast & LOCAL mean & Comparator mean & Difference & 95\% CI & Holm \(p_{\mathrm{adj}}\) & Positive\\
+\midrule
+Rank & RAW & 0.536415 & 0.517452 & 0.018964 & [0.012242,0.025864] & 0.000300 & 31/40\\
+Rank & PERMUTED & 0.536415 & 0.469933 & 0.066482 & [0.059380,0.073640] & 0.000300 & 40/40\\
+Rank & MATCHED & 0.536415 & 0.523306 & 0.013110 & [0.005787,0.020719] & 0.001800 & 27/40\\
+Magnitude & RAW & 0.618213 & 0.603772 & 0.014441 & [0.008274,0.020594] & 0.000300 & 29/40\\
+Magnitude & PERMUTED & 0.618213 & 0.602535 & 0.015679 & [0.010217,0.020958] & 0.000300 & 33/40\\
+Magnitude & MATCHED & 0.618213 & 0.603517 & 0.014696 & [0.010357,0.019227] & 0.000300 & 35/40\\
+\bottomrule
+\end{tabular}
+}%
+\begin{flushleft}\footnotesize Each row is LOCAL minus the named comparator. Means are paired-seed means across eight fixed environments. Positive counts refer to seed-level differences greater than zero.\end{flushleft}
+\end{table}
+
+\subsection{Descriptive task--split heterogeneity}
+The pooled seed-level effect concealed substantial heterogeneity across the fixed task--split environments. Table~\nef{tab:heterogeneity} reports the mean LOCAL--RAW difference within each environment and the number of positive seed-level differences. These rows are descriptive decompositions of the same 40 paired seeds used in the primary analysis; they are not additional independent replicates and no multiplicity claim is attached to them. The rank effect was positive in both splits for the experimental gap, logarithmic shear modulus, and logarithmic bulk modulus tasks, whereas it was negative for both splits of the materials-project gap task. Magnitude acquisition showed the same broad pattern, with a smaller negative mean for the IID materials-project gap split and a larger negative mean for its OOD split.
+
+\begin{table}[ht]
+\centering
+\caption{Descriptive LOCAL--RAW heterogeneity across the eight fixed task--split environments.}
+\label{tab:heterogeneity}
+\scriptsize
+\nesizebox{\linewidth}{!}{%
+\begin{tabular}{llrrrr}
+\toprule
+Task & Split & \multicolumn{2}{c}{Rank acquisition} & \multicolumn{2}{c}{Magnitude acquisition}\\
+ & & Mean difference & Positive/40 & Mean difference & Positive/40\\
+\midrule
+\texttt{expt\_gap} & IID & 0.01565 & 27/40 & 0.01256 & 27/40\\
+\texttt{expt\_gap} & Chemical OOD & 0.00824 & 22/40 & 0.00819 & 26/40\\
+\texttt{log\_gvrh} & IID & 0.03044 & 29/40 & 0.02146 & 27/40\\
+\texttt{log\_gvrh} & Chemical OOD & 0.03280 & 25/40 & 0.02493 & 25/40\\
+\texttt{log\_kvrh} & IID & 0.07365 & 34/40 & 0.02464 & 26/40\\
+\texttt{log\_kvrh} & Chemical OOD & 0.06382 & 29/40 & 0.03498 & 29/40\\
+\texttt{mp\_gap} & IID & $-$0.03823 & 3/40 & $-$0.00195 & 17/40\\
+\texttt{mp\_gap} & Chemical OOD & $-$0.03465 & 9/40 & $-$0.00929 & 16/40\\
+\bottomrule
+\end{tabular}
+}%
+\begin{flushleft}\footnotesize Mean difference is LOCAL minus RAW in \Lfourq. Positive/40 counts seed-level differences greater than zero. The eight rows are fixed environments, not independent population samples.\end{flushleft}
+\end{table}
+
+\section{Condition-level descriptive summaries}
+For reference, the 320 environment rows per condition yielded the following means. These values are descriptive and should not be analysed as 320 independent replicates. L1 is the mean diagnostic MACE over the four campaign states; it differs from the shared RAW-state calibration summary below because condition trajectories can diverge.
+
+\begin{table}[ht]
+\centering
+\caption{Descriptive condition means over 320 task--split--seed environment rows.}
+\small
+\begin{tabular}{llrrrr}
+\toprule
+Rule & Condition & \Lfourq & L1 & Final recall & Runtime (s)\\
+\midrule
+Rank & RAW & 0.5175 & 0.0610 & 0.7751 & 32.50\\
+Rank & LOCAL & 0.5364 & 0.0401 & 0.8021 & 26.11\\
+Rank & PERMUTED & 0.4699 & 0.0468 & 0.7210 & 28.41\\
+Rank & MATCHED & 0.5233 & 0.0621 & 0.8022 & 27.67\\
+Magnitude & RAW & 0.6038 & 0.0645 & 0.9006 & 6.13\\
+Magnitude & GLOBAL & 0.6007 & 0.0473 & 0.9013 & 6.20\\
+Magnitude & LOCAL & 0.6182 & 0.0413 & 0.9032 & 25.25\\
+Magnitude & PERMUTED & 0.6025 & 0.0492 & 0.9049 & 26.14\\
+Magnitude & MATCHED & 0.6035 & 0.0644 & 0.9001 & 24.82\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The large runtime dispersion is expected from heterogeneous benchmark sizes and is not a primary endpoint. In particular, condition-level means are not used to claim that calibration reduces computational cost.
+
+\section{Calibration diagnostic summary}
+The fixed-state calibration file contains 1,280 records per diagnostic method. Mean MACE was 0.0610 for RAW, 0.0465 for GLOBAL, 0.0524 for OOF-$\alpha=1$, and 0.0412 for OOF-$\alpha=0.5$. The corresponding medians were 0.0526, 0.0403, 0.0446, and 0.0358. These confirmation-state values describe the frozen intervention; the interpolation exponent had already been selected using separate development seeds. They are not retrospectively used to choose the exponent. They are not a new independent confirmatory test.
+
+Supplementary Figure~\nef{fig:reliability} and Table~\nef{tab:reliability} report the mean observed interval coverage at each nominal level. Each point averages 1,280 shared fixed-state records. These descriptive means do not show the distribution across states. MACE was calculated as an absolute deviation within each state before averaging, so the mean-coverage curve need not reproduce the method ordering by mean MACE.
+
+The Gaussian NLL means in the diagnostic CSV are extremely heavy-tailed, with means near \(1.8\times10^{12}\) and medians near one. Because this discrepancy indicates sensitivity to a small number of extreme records, the manuscript does not use mean Gaussian NLL to rank methods or support a calibration claim. The raw diagnostic CSV is retained in the project package for transparent audit.
+
+
+
+\section{Additional descriptive decision summaries}
+The initial-state batch disagreement was \(1-|S_{\mathrm{RAW}}\cap S_{\mathrm{LOCAL}}|/k\), where each set contained the top \(k\) candidates under its acquisition score on the same initial model and pool. The manuscript reports means and medians over eight environments and 40 seeds for each rule. All 320 expected initial-state records were finite and included; no rows were excluded. This summary was added during manuscript revision and is descriptive, with no new multiplicity-adjusted hypothesis test. Later-stage disagreement values were not pooled into this comparison because campaign states can diverge after the first query batch.
+
+
+
+\subsection{Exploratory association between initial MACE and campaign utility}
+For each task--split--seed block, we calculated the stage-0 change in mean absolute coverage error (MACE) as OOF-LOCAL ($\alpha=0.5$) minus RAW from the shared-state diagnostic, and the campaign utility change as LOCAL minus RAW in \Lfourq. The two acquisition rules share the same stage-0 MACE value; their campaign utility differences are rule-specific. Table~\nef{tab:mace_utility_association} reports the mean changes and Spearman correlation across 40 paired seeds within each fixed environment. The correlations are descriptive, with no p-values or population-level task interpretation. Figure~4 in the main text visualizes the four MP-gap conditions. These summaries show whether initial-state calibration changes co-occurred with later utility changes, but cannot determine which candidate errors or displacements generated the outcomes.
+
+\begin{table}[!ht]
+\centering
+\caption{Exploratory association between stage-0 MACE change and campaign utility change across paired seed blocks.}
+\label{tab:mace_utility_association}
+\scriptsize
+\begin{tabularx}{\linewidth}{>{\naggedright\arraybackslash}Xllrrr}
+\toprule
+Task & Split & Policy & Mean $\Delta$MACE & Mean $\Delta L_{4,\mathrm{query}}$ & Spearman $\nho$\\
+\midrule
+Experimental gap & IID & Rank & 0.00844 & 0.01565 & $-0.12$\\
+Experimental gap & IID & Magnitude & 0.00844 & 0.01256 & $-0.13$\\
+Experimental gap & Chemical OOD & Rank & 0.00640 & 0.00824 & 0.11\\
+Experimental gap & Chemical OOD & Magnitude & 0.00640 & 0.00819 & 0.13\\
+Materials Project gap & IID & Rank & $-0.00631$ & $-0.03823$ & 0.03\\
+Materials Project gap & IID & Magnitude & $-0.00631$ & $-0.00195$ & 0.14\\
+Materials Project gap & Chemical OOD & Rank & $-0.00879$ & $-0.03465$ & 0.08\\
+Materials Project gap & Chemical OOD & Magnitude & $-0.00879$ & $-0.00929$ & 0.02\\
+Log shear modulus (GVRH) & IID & Rank & $-0.08087$ & 0.03044 & 0.09\\
+Log shear modulus (GVRH) & IID & Magnitude & $-0.08087$ & 0.02146 & $-0.23$\\
+Log shear modulus (GVRH) & Chemical OOD & Rank & $-0.05978$ & 0.03280 & $-0.03$\\
+Log shear modulus (GVRH) & Chemical OOD & Magnitude & $-0.05978$ & 0.02493 & $-0.02$\\
+Log bulk modulus (KVRH) & IID & Rank & $-0.06787$ & 0.07365 & $-0.04$\\
+Log bulk modulus (KVRH) & IID & Magnitude & $-0.06787$ & 0.02464 & 0.10\\
+Log bulk modulus (KVRH) & Chemical OOD & Rank & $-0.05427$ & 0.06382 & 0.16\\
+Log bulk modulus (KVRH) & Chemical OOD & Magnitude & $-0.05427$ & 0.03498 & 0.05\\
+\bottomrule
+\end{tabularx}
+\begin{flushleft}\footnotesize Each row contains 40 paired confirmation-seed blocks within one fixed task--split environment. Negative $\Delta$MACE indicates lower MACE; negative $\Delta L_{4,\mathrm{query}}$ indicates lower LOCAL utility. The correlations are exploratory summaries only; no significance tests are reported. Source: \texttt{tables/exploratory\_mace\_utility\_association.csv}.\end{flushleft}
+\end{table}
+\paragraph{Exact invariance check.} Across 16 task--split--seed cases, rank-GLOBAL selected the same material IDs as RAW. This deterministic check concerns implementation only.
+
+\clearpage
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.9\linewidth]{figures/Fixed_State_Calibration_normalized.pdf}
+\caption{Fixed-state diagnostic MACE for RAW, GLOBAL, and corrected OOF local calibration at two frozen interpolation exponents. Blue squares denote means and teal circles medians over 1,280 shared-state records per method; lower values indicate smaller coverage error. This panel selects the four principal conditions discussed in the manuscript; all six diagnostic methods remain in the source table. The records are correlated campaign states and are not independent inferential replicates. No standard-error bars or new hypothesis tests are implied, and these confirmation diagnostics did not determine the exponent.}
+\label{fig:calibration}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.9\linewidth]{figures/Initial_Selection_Change_normalized.pdf}
+\caption{Initial-state selection changes after local calibration. Blue squares and teal circles show mean and median batch disagreement, respectively, over all 320 initial task--split--seed states for each acquisition rule. Disagreement is the fraction of the RAW batch replaced under LOCAL on the same initial model and pool. This post-analysis descriptive summary shows decision perturbation, not its benefit: discovery utility is assessed separately by the paired-seed campaign contrasts. No rows were excluded and no independent-replicate or significance claim is made.}
+\label{fig:decision}
+\end{figure}
+
+\begin{table}[!ht]
+\centering
+\caption{Mean observed interval coverage at each nominal level across shared fixed states.}
+\label{tab:reliability}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Method & 50\% nominal & 80\% nominal & 90\% nominal & 95\% nominal\\
+\midrule
+RAW & 49.49\% & 76.22\% & 84.91\% & 89.56\%\\
+GLOBAL & 53.59\% & 80.42\% & 87.93\% & 91.72\%\\
+LOCAL ($\alpha=1$) & 50.64\% & 77.14\% & 84.67\% & 88.75\%\\
+LOCAL ($\alpha=0.5$) & 52.39\% & 79.81\% & 87.35\% & 91.23\%\\
+\bottomrule
+\end{tabular}
+\begin{flushleft}\footnotesize Each value is the mean observed coverage among 1,280 correlated shared-state records. It is descriptive; no confidence interval or independent-replicate interpretation is implied.\end{flushleft}
+\end{table}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.96\linewidth]{figures/Fixed_State_Reliability.pdf}
+\caption{Mean observed interval coverage plotted against nominal coverage for the four principal fixed-state diagnostic methods. Each point averages 1,280 correlated campaign states. The dashed line denotes ideal mean coverage. These aggregated points do not display state-level variation, and the curve is not a substitute for the per-state absolute-deviation calculation used for MACE.}
+\label{fig:reliability}
+\end{figure}
+
+The preceding coverage and MACE summaries assess marginal interval calibration on shared fixed states. They do not measure how well uncertainty orders prediction errors or whether queries improve the target-tail objective. As a separate exploratory diagnostic, we calculated candidate-level Spearman association between uncertainty and absolute prediction error on the retrospectively labelled V2 target candidate pools. In the LOCAL campaign states, the equal-weight mean association across eight fixed environments was 0.463 for rank and 0.454 for magnitude under corrected uncertainty, compared with 0.463 and 0.455 under RAW uncertainty (Table~\nef{tab:v2_error_alignment}). Environment means ranged from 0.22 to 0.75. These candidate-pool values are not calibration estimates: candidate labels were attached retrospectively, the queried pool changes over stages, and the environments are fixed. Median and 90th-percentile absolute standardized residuals are summarized descriptively without a Gaussian distribution claim. Marginal calibration, uncertainty--error ranking, and discovery utility are distinct outcomes.
+
+\begin{table}[!ht]
+\centering
+\caption{Exploratory uncertainty--error alignment on V2 LOCAL trajectory candidate pools.}
+\label{tab:v2_error_alignment}
+\scriptsize
+\nesizebox{\linewidth}{!}{\input{tables/v2_candidate_error_alignment.tex}}
+\begin{flushleft}\footnotesize Each row averages 640 seed--stage summaries with equal weight across eight fixed task--split environments (20 seeds and four stages per environment). The environment range is the minimum and maximum of the eight environment means, not an interval. Spearman $\nho_s$ compares uncertainty with absolute prediction error. Standardized residual summaries use $|y-\mu|/s$ and make no Gaussian claim. Target labels were attached retrospectively and were not used in fitting or selection. These values are exploratory and are not independent inferential replicates.\end{flushleft}
+\end{table}
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=0.96\linewidth]{figures/Exploratory_MACE_First_Batch_Disagreement.pdf}
+\caption{Exploratory association between stage-0 MACE change (OOF-LOCAL, $\alpha=0.5$, minus RAW) and initial-batch disagreement (the fraction of RAW first-batch candidates absent from the LOCAL first batch). Each point is one paired seed within a task--split--policy environment ($n=40$); circles denote IID, squares chemical OOD, blue denotes rank acquisition, and teal magnitude acquisition. The annotations are descriptive Spearman correlations. No p-values, independent-task inference, or candidate-level mechanism is implied.}
+\label{fig:mace_selection}
+\end{figure}
+
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=0.96\linewidth]{figures/Primary_Paired_Seed_Distributions.pdf}
+\caption{Distribution of the 40 paired-seed differences for each of the six prespecified primary contrasts in integrated top-1\% recall over the query budget ($\Lfourq$). Each point is one seed-level difference, calculated after averaging equally over the eight fixed task--split environments. Boxes show the median and interquartile range; whiskers extend to the most extreme observations within 1.5 interquartile ranges. The horizontal dashed line marks zero, and positive differences favor LOCAL. These points are the paired blocks used in the primary inference, not additional independent observations.}
+\label{fig:primary_seed_distributions}
+\end{figure}
+
+\clearpage
+\section{Exploratory candidate-value displacement analysis}
+The confirmation files retain ordered selected material IDs at each query stage. We used these IDs to compare the candidates entering the LOCAL batch with the candidates displaced from the RAW batch at the same stage, then joined their observed target values from the archived task tables. For each task--split--policy, we averaged the four stage-level entering-minus-displaced differences within each of the 40 paired seeds. Table~\nef{tab:selection_displacement} reports the mean target values and the distribution of these seed-block summaries. The join is retrospective: observed labels were not used to select candidates.
+
+For \texttt{matbench\_mp\_gap}, rank-policy LOCAL entrants had higher mean target values than same-stage RAW-displaced candidates in both splits ($+0.0673$ IID and $+0.1249$ chemical OOD), whereas the magnitude-policy differences were slightly negative ($-0.0162$ and $-0.0143$). Since primary $\Lfourq$ was lower under LOCAL for both rules in both splits, mean target values of exchanged batch members do not explain the top-1\% utility loss. For these historical confirmation files, the target-pool membership and full candidate-level prediction vectors were not retained, so their entrant-tail enrichment cannot be reconstructed. The separate verified V2 files retain the relevant candidate-state fields and are analysed below. No causal or new confirmatory claim is made.
+
+\input{tables/selection_displacement_table_s6.tex}
+\section{SECONDARY ROBUSTNESS ANALYSIS (V2)}
+The original six contrasts remain the sole confirmatory analysis. V2 is an independent secondary analysis, not a replication of historical V5. It uses an independently hashed snapshot of the four Matbench material tables, separate deterministic split-membership records, seeds 2026092600--2026092619, and an isolated output namespace. Each task--split--seed campaign uses the same source/diagnostic/target partition proportions (20/20/60), source-only initial training labels, a target-pool query budget of 20\%, and four balanced sequential batches.
+
+The second randomized-tree-ensemble construction uses \texttt{RandomForestRegressor} \citep{breiman2001random} with 80 bootstrap trees, minimum leaf size two, all features considered per split, and one worker. Raw uncertainty is the population standard deviation of the tree predictions. Out-of-bag tree predictions on currently labelled rows provide residual ratios for calibration; at least three OOB predictions are required per row, and at least eight rows are required to fit. The local-scale ExtraTrees model uses 64 trees, minimum leaf size five, five deterministic folds ordered by SHA-256 material-ID hashes, median normalization, clipping to [0.25,4], and the fixed geometric interpolation exponent \(\alpha=0.5\). The resulting correction multiplies raw uncertainty.
+
+Candidate-level state files include the candidate ID, predicted mean, raw and corrected uncertainty, local scale, both counterfactual policy scores/ranks/selections, actual query order, and target value attached retrospectively after the batch was fixed. Target labels are excluded from fitting, calibration, and acquisition; diagnostic labels are used only for descriptive calibration summaries. The campaign code also records MACE on the fixed diagnostic partition, defined as the unweighted mean absolute deviation between empirical and nominal central-interval coverage at 50\%, 80\%, 90\%, and 95\%. RAW and LOCAL MACE are stored at each of four stages; the seed-level averages are auxiliary descriptive diagnostics, separate from the V2 utility endpoint. The complete per-stage candidate-state records are retained as Parquet files. Alternative target-tail fractions (0.5\%, 1\%, and 5\%) are evaluated by post-processing the same campaigns; no threshold-specific model reruns are performed. No V2 p-values are planned; effect distributions and task/split heterogeneity are reported descriptively.
+
+\paragraph{Exploratory MP-gap diagnostics.} Candidate-level prediction-error alignment, tail-scale allocation, and LOCAL-only versus RAW-only candidate displacement are labelled exploratory. These retrospective diagnostics do not support causal chemical-mechanism claims.
+
+\subsection{V2 results}
+The mean top-1\% LOCAL--RAW differences, after equal weighting across task--split environments, were +0.0057 for rank acquisition and +0.0149 for magnitude acquisition. Tail sensitivity was not monotonic across policies: rank showed a near-zero mean at 0.5\% and a positive mean at 5\%, whereas magnitude was positive at 0.5\% and 1\% and negative at 5\%. Figure~\nef{fig:v2_environment_tail} and Table~\nef{tab:v2_tail_effects} show the task--split detail. All effects are descriptive paired summaries over 20 seeds; no V2 hypothesis tests were performed.
+
+Initial RAW--LOCAL first-batch disagreement averaged 25.8\% under rank and 34.6\% under magnitude when task--split means were equally weighted (Table~\nef{tab:v2_disagreement}). The fixed diagnostic-partition MACE summaries are reported separately in Table~\nef{tab:v2_calibration}; they are auxiliary calibration diagnostics and are not target-pool utility measures. Exploratory mean target values among queried candidates and MP-gap candidate-level diagnostics are in Tables~\nef{tab:v2_query_quality} and~\nef{tab:v2_mp_gap_diagnostics}, respectively. Queried-target averages do not measure target-tail enrichment, and candidate-level associations do not establish a causal mechanism.
+
+\paragraph{Retrospective tail enrichment among exchanged candidates.} For each V2 task--split--policy--seed--stage, we contrasted candidates selected only by LOCAL with candidates selected only by RAW; the intersection selected by both is counted separately. Stage 0 uses an identical candidate pool, while later stages compare each policy's actual batch after its own preceding trajectory. Target-pool tail membership is taken from the stored, post-selection labels and was not used during acquisition. Table~\nef{tab:new_candidate_enrichment} reports pooled entrant counts and tail fractions over 20 seeds and four stages. The rates are descriptive candidate-level proportions; the eight task--split environments are summarized with equal weight in the pooled overview, and no bootstrap intervals or significance tests are used. Mean target value is reported only as a secondary descriptive quantity in the machine-readable source table; it is not a substitute for target-tail enrichment.
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/candidate_tail_enrichment.pdf}
+\caption{V2 retrospective difference between the target-tail fraction among LOCAL-only entrants and RAW-only entrants for each of the eight fixed task--split environments. Panels separate rank and magnitude acquisition; marker color and shape distinguish target-pool tails of 0.5\%, 1\%, and 5\%. Each environment summary pools 20 paired seeds and four campaign stages. The horizontal line marks zero; positive values indicate greater tail enrichment among LOCAL-only entrants. Points have no interval bars and are descriptive secondary diagnostics.}
+\label{fig:candidate_tail_enrichment}
+\end{figure}
+
+\begin{table}[p]
+\centering
+\caption{V2 exchanged-candidate counts and retrospective target-tail enrichment.}
+\label{tab:new_candidate_enrichment}
+\scriptsize
+\nesizebox{\linewidth}{!}{\input{tables/S_new_candidate_enrichment.tex}}
+\begin{flushleft}\footnotesize Counts pool all 20 seeds and four sequential stages within each fixed task--split--policy. ``Both'' is the number selected by both conditions at that stage. Tail fractions are the proportions of LOCAL-only or RAW-only candidates belonging to the indicated target-pool tail. $\Delta$ is LOCAL-only minus RAW-only tail fraction; the enrichment ratio is their quotient when the RAW-only rate is nonzero. A zero or undefined denominator is not assigned a finite ratio. These retrospective labels were not used for candidate selection.\end{flushleft}
+\end{table}
+
+\subsection{Secondary sensitivity to the interpolation exponent \texorpdfstring{$\alpha$}{alpha}}
+The frozen V2 setting remains $\alpha=0.5$. To assess whether the qualitative task--policy pattern depends on this value, a separate secondary analysis ran fresh sequential LOCAL campaigns at $\alpha\in\{0.25,0.50,0.75,1.00\}$ in four prespecified representative environments, under both acquisition policies and all 20 V2 seeds (640 LOCAL trajectories). The 160 RAW references are the hash-verified V2 campaigns because their scores and decisions do not depend on $\alpha$. The alpha=0.50 trajectories were rerun rather than rescored from stored states, and were checked against the frozen V2 LOCAL trajectory. No alpha was selected or tuned. Table~\nef{tab:alpha_sensitivity} shows environment-level top-tail summaries and Figure~\nef{fig:alpha_sensitivity} shows the mean top-1\% effect by environment. Seed ranges are observed minima and maxima, not confidence intervals; no hypothesis tests were performed. This analysis evaluates robustness only and does not change the primary alpha=0.5 result.
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=0.94\linewidth]{figures/alpha_sensitivity.pdf}
+\caption{Secondary sequential alpha sensitivity. Lines show the mean LOCAL($\alpha$)--RAW integrated top-1\% recall difference over 20 paired seeds in each of four prespecified task--split environments. Panels show rank and magnitude acquisition. The horizontal line marks zero; no intervals or hypothesis tests are shown. The alpha=0.50 value is the frozen V2 setting, and this analysis does not select a replacement.}
+\label{fig:alpha_sensitivity}
+\end{figure}
+
+\input{alpha_sensitivity_main/alpha_sensitivity_table.tex}
+
+Across environments, top-1\% rank differences stayed small and negative (−0.003 to −0.018); magnitude changed from +0.003/+0.012 at $\alpha=0.25/0.50$ to −0.012/−0.045 at 0.75/1.00. At 5\%, rank stayed positive (+0.014 to +0.022), while magnitude reached −0.061 at $\alpha=1.00$. No new exponent is selected; $\alpha=0.50$ remains primary.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/v2_task_split_tail_heatmap.pdf}
+\caption{V2 mean LOCAL--RAW differences in integrated target-tail recall for each fixed task--split environment and policy--tail combination. The diverging color scale is centered at zero; annotated values are mean paired differences over 20 seeds. Positive values favor LOCAL. The heatmap is descriptive and does not show seed-level uncertainty or support task-level inferential claims.}
+\label{fig:v2_environment_tail}
+\end{figure}
+
+\input{tables/v2_tail_effects_s7.tex}
+\input{tables/v2_initial_disagreement_s8.tex}
+\input{tables/v2_calibration_s9.tex}
+\input{tables/v2_mp_gap_s10.tex}
+\input{tables/v2_query_quality_s11.tex}
+
+\bibliographystyle{plainnat}
+\bibliography{bibliography}
+
+\end{document}

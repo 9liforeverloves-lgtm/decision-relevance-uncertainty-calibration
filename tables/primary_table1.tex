@@ -1,0 +1,21 @@
+\begin{table}[ht]
+\centering
+\caption{Prespecified paired-seed contrasts in integrated top-1\% recall over the query budget (\Lfourq).}
+\label{tab:effects}
+\small
+\nesizebox{\linewidth}{!}{%
+\begin{tabular}{llrrrrr}
+\toprule
+Acquisition & Contrast & Mean difference & 95\% CI & Holm \(p_{\mathrm{adj}}\) & Positive seeds & \(n\)\\
+\midrule
+Rank & LOCAL $-$ RAW & 0.0190 & [0.0122, 0.0259] & 0.00030 & 31/40 & 40\\
+Rank & LOCAL $-$ PERMUTED & 0.0665 & [0.0594, 0.0736] & 0.00030 & 40/40 & 40\\
+Rank & LOCAL $-$ MATCHED & 0.0131 & [0.0058, 0.0207] & 0.00180 & 27/40 & 40\\
+Magnitude & LOCAL $-$ RAW & 0.0144 & [0.0083, 0.0206] & 0.00030 & 29/40 & 40\\
+Magnitude & LOCAL $-$ PERMUTED & 0.0157 & [0.0102, 0.0210] & 0.00030 & 33/40 & 40\\
+Magnitude & LOCAL $-$ MATCHED & 0.0147 & [0.0104, 0.0192] & 0.00030 & 35/40 & 40\\
+\bottomrule
+\end{tabular}
+}%
+\begin{flushleft}\footnotesize Differences are LOCAL minus comparator. Confidence intervals are percentile-bootstrap intervals over paired seed blocks. Holm-adjusted \(p_{\mathrm{adj}}\) values derive from two-sided sign-flip tests across the six primary contrasts. Positive seeds count seed-level differences greater than zero.\end{flushleft}
+\end{table}

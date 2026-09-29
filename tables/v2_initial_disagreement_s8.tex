@@ -1,0 +1,35 @@
+\setlength{\tabcolsep}{4pt}
+\footnotesize
+\begin{longtable}{@{}llrrrr@{}}
+\caption{V2 initial-batch selection disagreement between LOCAL and RAW.}\label{tab:v2_disagreement}\\
+\toprule
+Task & Split & Policy & Mean (\%) & Median (\%) & Range (\%) \\
+\midrule
+\endfirsthead
+\caption[]{V2 initial-batch selection disagreement between LOCAL and RAW. (continued)}\\
+\toprule
+Task & Split & Policy & Mean (\%) & Median (\%) & Range (\%) \\
+\midrule
+\endhead
+\midrule\multicolumn{6}{r}{Continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+Expt. gap & IID & Rank & 18.9 & 14.1 & [2.2, 49.3] \\
+Expt. gap & IID & Magnitude & 29.3 & 23.6 & [2.9, 66.7] \\
+Expt. gap & Chem. OOD & Rank & 21.7 & 19.2 & [0.7, 73.9] \\
+Expt. gap & Chem. OOD & Magnitude & 24.4 & 23.6 & [3.6, 58.7] \\
+MP gap & IID & Rank & 26.8 & 27.1 & [19.2, 33.4] \\
+MP gap & IID & Magnitude & 24.7 & 25.0 & [17.8, 36.9] \\
+MP gap & Chem. OOD & Rank & 32.0 & 31.7 & [22.0, 43.7] \\
+MP gap & Chem. OOD & Magnitude & 26.8 & 26.6 & [16.2, 41.8] \\
+log shear modulus (GVRH) & IID & Rank & 21.8 & 19.5 & [9.4, 38.0] \\
+log shear modulus (GVRH) & IID & Magnitude & 32.2 & 31.9 & [13.4, 56.5] \\
+log shear modulus (GVRH) & Chem. OOD & Rank & 25.5 & 25.5 & [12.5, 40.7] \\
+log shear modulus (GVRH) & Chem. OOD & Magnitude & 37.9 & 35.6 & [7.0, 64.4] \\
+log bulk modulus (KVRH) & IID & Rank & 28.5 & 24.9 & [16.7, 41.9] \\
+log bulk modulus (KVRH) & IID & Magnitude & 48.2 & 44.5 & [34.3, 80.9] \\
+log bulk modulus (KVRH) & Chem. OOD & Rank & 31.2 & 31.0 & [14.0, 46.5] \\
+log bulk modulus (KVRH) & Chem. OOD & Magnitude & 53.0 & 55.5 & [26.7, 84.5] \\
+\end{longtable}
+\noindent\footnotesize Mean and median summarize 20 fixed seed pairs per row. Disagreement is the fraction of RAW first-batch candidates absent from the LOCAL first batch. Values are descriptive; no independent-task inference is implied.

@@ -1,0 +1,31 @@
+\begin{table}[!ht]
+\centering
+\caption{Exploratory same-stage candidate displacement: observed target values of LOCAL-only entrants and RAW-only candidates.}
+\label{tab:selection_displacement}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\nenewcommand{\arraystretch}{0.9}
+\begin{tabularx}{\linewidth}{>{\naggedright\arraybackslash}Xllrrr}
+\toprule
+Task & Split & Policy & LOCAL / RAW mean $y$ & Mean $\Delta y$ (SD) & Seed blocks $\Delta y<0$\\
+\midrule
+Experimental gap & Chemical OOD & Magnitude & 1.796 / 1.883 & -0.087 (0.307) & 57\%\\
+Experimental gap & Chemical OOD & Rank & 1.866 / 1.743 & 0.124 (0.326) & 35\%\\
+Experimental gap & IID & Magnitude & 1.856 / 1.852 & 0.003 (0.336) & 48\%\\
+Experimental gap & IID & Rank & 1.901 / 1.756 & 0.145 (0.296) & 30\%\\
+Log shear modulus (GVRH) & Chemical OOD & Magnitude & 1.783 / 1.862 & -0.078 (0.048) & 92\%\\
+Log shear modulus (GVRH) & Chemical OOD & Rank & 1.790 / 1.781 & 0.010 (0.039) & 38\%\\
+Log shear modulus (GVRH) & IID & Magnitude & 1.779 / 1.853 & -0.073 (0.045) & 100\%\\
+Log shear modulus (GVRH) & IID & Rank & 1.772 / 1.778 & -0.005 (0.034) & 50\%\\
+Log bulk modulus (KVRH) & Chemical OOD & Magnitude & 2.068 / 2.169 & -0.101 (0.059) & 95\%\\
+Log bulk modulus (KVRH) & Chemical OOD & Rank & 2.078 / 2.080 & -0.002 (0.039) & 55\%\\
+Log bulk modulus (KVRH) & IID & Magnitude & 2.063 / 2.171 & -0.108 (0.063) & 98\%\\
+Log bulk modulus (KVRH) & IID & Rank & 2.084 / 2.077 & 0.006 (0.043) & 45\%\\
+Materials Project gap & Chemical OOD & Magnitude & 2.811 / 2.826 & -0.014 (0.140) & 52\%\\
+Materials Project gap & Chemical OOD & Rank & 2.793 / 2.668 & 0.125 (0.147) & 25\%\\
+Materials Project gap & IID & Magnitude & 2.971 / 2.988 & -0.016 (0.065) & 65\%\\
+Materials Project gap & IID & Rank & 2.928 / 2.861 & 0.067 (0.076) & 15\%\\
+\bottomrule
+\end{tabularx}
+\begin{flushleft}\footnotesize Rows summarize 40 seed blocks per task--split--policy. Within each seed, differences were averaged equally across stages. $\Delta y$ is LOCAL-only entrants minus same-stage RAW-only candidates, in native target units; labels were joined retrospectively. Descriptive only, no tests. Frozen target-pool membership is absent, so top-1\% enrichment cannot be measured. Source: \texttt{tables/exploratory\_selection\_displacement\_summary.csv}.\end{flushleft}
+\end{table}

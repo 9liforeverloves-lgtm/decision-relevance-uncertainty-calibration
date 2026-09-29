@@ -1,0 +1,35 @@
+\setlength{\tabcolsep}{3pt}
+\footnotesize
+\begin{longtable}{@{}lllrrrr@{}}
+\caption{Exploratory V2 mean target values among queried candidates.}\label{tab:v2_query_quality}\\
+\toprule
+Task & Split & Policy & RAW & LOCAL & LOCAL $-$ RAW & SD \\
+\midrule
+\endfirsthead
+\caption[]{Exploratory V2 mean target values among queried candidates. (continued)}\\
+\toprule
+Task & Split & Policy & RAW & LOCAL & LOCAL $-$ RAW & SD \\
+\midrule
+\endhead
+\midrule\multicolumn{7}{r}{Continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+Expt. gap & IID & Rank & 1.885 & 1.952 & +0.067 & 0.148 \\
+Expt. gap & IID & Magnitude & 1.992 & 1.927 & -0.065 & 0.171 \\
+Expt. gap & Chem. OOD & Rank & 1.772 & 1.844 & +0.072 & 0.175 \\
+Expt. gap & Chem. OOD & Magnitude & 1.855 & 1.879 & +0.024 & 0.172 \\
+MP gap & IID & Rank & 2.908 & 2.929 & +0.021 & 0.050 \\
+MP gap & IID & Magnitude & 3.205 & 3.167 & -0.038 & 0.031 \\
+MP gap & Chem. OOD & Rank & 2.694 & 2.698 & +0.004 & 0.090 \\
+MP gap & Chem. OOD & Magnitude & 2.954 & 2.939 & -0.015 & 0.076 \\
+log shear modulus (GVRH) & IID & Rank & 1.786 & 1.792 & +0.006 & 0.021 \\
+log shear modulus (GVRH) & IID & Magnitude & 1.872 & 1.812 & -0.060 & 0.022 \\
+log shear modulus (GVRH) & Chem. OOD & Rank & 1.797 & 1.796 & 0.000 & 0.035 \\
+log shear modulus (GVRH) & Chem. OOD & Magnitude & 1.871 & 1.809 & -0.063 & 0.044 \\
+log bulk modulus (KVRH) & IID & Rank & 2.084 & 2.094 & +0.010 & 0.034 \\
+log bulk modulus (KVRH) & IID & Magnitude & 2.185 & 2.080 & -0.105 & 0.038 \\
+log bulk modulus (KVRH) & Chem. OOD & Rank & 2.066 & 2.070 & +0.003 & 0.025 \\
+log bulk modulus (KVRH) & Chem. OOD & Magnitude & 2.171 & 2.068 & -0.103 & 0.039 \\
+\end{longtable}
+\noindent\footnotesize Each row summarizes 20 paired seed blocks. This retrospective descriptive average is not top-tail enrichment and is not used as a confirmatory endpoint.

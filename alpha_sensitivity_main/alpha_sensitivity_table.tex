@@ -1,0 +1,113 @@
+\setlength{\tabcolsep}{3pt}
+\scriptsize
+\begin{longtable}{@{}lllllrrlr@{}}
+\caption{Alpha sensitivity across the four prespecified V2 environments.}\label{tab:alpha_sensitivity}\\
+\toprule
+$\alpha$ & Task & Split & Policy & Tail & Mean $\Delta$ & SD & Seed range & Positive/$n$ \\
+\midrule
+\endfirsthead
+\caption[]{Alpha sensitivity across the four prespecified V2 environments (continued).}\\
+\toprule
+$\alpha$ & Task & Split & Policy & Tail & Mean $\Delta$ & SD & Seed range & Positive/$n$ \\
+\midrule
+\endhead
+\midrule\multicolumn{9}{r}{Continued on next page}\\
+\endfoot
+\bottomrule\endlastfoot
+0.25 & Expt gap & IID & Magnitude & 0.5\% & -0.015 & 0.041 & [-0.127, +0.065] & 7/20 \\
+0.25 & Expt gap & IID & Magnitude & 1\% & -0.026 & 0.043 & [-0.138, +0.068] & 4/20 \\
+0.25 & Expt gap & IID & Magnitude & 5\% & -0.002 & 0.036 & [-0.132, +0.060] & 12/20 \\
+0.25 & Expt gap & IID & Rank & 0.5\% & -0.034 & 0.073 & [-0.197, +0.047] & 7/20 \\
+0.25 & Expt gap & IID & Rank & 1\% & -0.020 & 0.048 & [-0.109, +0.102] & 5/20 \\
+0.25 & Expt gap & IID & Rank & 5\% & +0.007 & 0.029 & [-0.029, +0.079] & 11/20 \\
+0.25 & Log bulk (KVRH) & chem OOD & Magnitude & 0.5\% & +0.035 & 0.070 & [-0.124, +0.177] & 16/20 \\
+0.25 & Log bulk (KVRH) & chem OOD & Magnitude & 1\% & +0.035 & 0.065 & [-0.128, +0.172] & 16/20 \\
+0.25 & Log bulk (KVRH) & chem OOD & Magnitude & 5\% & -0.016 & 0.055 & [-0.140, +0.082] & 9/20 \\
+0.25 & Log bulk (KVRH) & chem OOD & Rank & 0.5\% & +0.056 & 0.108 & [-0.090, +0.287] & 11/20 \\
+0.25 & Log bulk (KVRH) & chem OOD & Rank & 1\% & +0.053 & 0.086 & [-0.044, +0.263] & 14/20 \\
+0.25 & Log bulk (KVRH) & chem OOD & Rank & 5\% & +0.021 & 0.040 & [-0.038, +0.112] & 14/20 \\
+0.25 & MP gap & chem OOD & Magnitude & 0.5\% & -0.004 & 0.029 & [-0.078, +0.045] & 10/20 \\
+0.25 & MP gap & chem OOD & Magnitude & 1\% & -0.000 & 0.040 & [-0.087, +0.056] & 11/20 \\
+0.25 & MP gap & chem OOD & Magnitude & 5\% & +0.005 & 0.032 & [-0.048, +0.058] & 12/20 \\
+0.25 & MP gap & chem OOD & Rank & 0.5\% & -0.039 & 0.036 & [-0.102, +0.017] & 2/20 \\
+0.25 & MP gap & chem OOD & Rank & 1\% & -0.027 & 0.034 & [-0.086, +0.030] & 4/20 \\
+0.25 & MP gap & chem OOD & Rank & 5\% & +0.012 & 0.029 & [-0.047, +0.054] & 13/20 \\
+0.25 & MP gap & IID & Magnitude & 0.5\% & -0.004 & 0.015 & [-0.033, +0.027] & 7/20 \\
+0.25 & MP gap & IID & Magnitude & 1\% & +0.002 & 0.011 & [-0.026, +0.019] & 12/20 \\
+0.25 & MP gap & IID & Magnitude & 5\% & +0.010 & 0.009 & [-0.008, +0.028] & 19/20 \\
+0.25 & MP gap & IID & Rank & 0.5\% & -0.031 & 0.021 & [-0.071, +0.017] & 1/20 \\
+0.25 & MP gap & IID & Rank & 1\% & -0.018 & 0.024 & [-0.060, +0.021] & 5/20 \\
+0.25 & MP gap & IID & Rank & 5\% & +0.015 & 0.014 & [-0.006, +0.040] & 17/20 \\
+0.50 & Expt gap & IID & Magnitude & 0.5\% & +0.024 & 0.081 & [-0.134, +0.183] & 11/20 \\
+0.50 & Expt gap & IID & Magnitude & 1\% & +0.020 & 0.058 & [-0.074, +0.169] & 14/20 \\
+0.50 & Expt gap & IID & Magnitude & 5\% & +0.017 & 0.040 & [-0.080, +0.110] & 15/20 \\
+0.50 & Expt gap & IID & Rank & 0.5\% & -0.035 & 0.064 & [-0.188, +0.092] & 6/20 \\
+0.50 & Expt gap & IID & Rank & 1\% & -0.024 & 0.040 & [-0.094, +0.044] & 5/20 \\
+0.50 & Expt gap & IID & Rank & 5\% & +0.009 & 0.032 & [-0.048, +0.099] & 15/20 \\
+0.50 & Log bulk (KVRH) & chem OOD & Magnitude & 0.5\% & +0.050 & 0.074 & [-0.155, +0.185] & 17/20 \\
+0.50 & Log bulk (KVRH) & chem OOD & Magnitude & 1\% & +0.042 & 0.080 & [-0.160, +0.172] & 17/20 \\
+0.50 & Log bulk (KVRH) & chem OOD & Magnitude & 5\% & -0.044 & 0.070 & [-0.176, +0.068] & 6/20 \\
+0.50 & Log bulk (KVRH) & chem OOD & Rank & 0.5\% & +0.068 & 0.155 & [-0.278, +0.333] & 14/20 \\
+0.50 & Log bulk (KVRH) & chem OOD & Rank & 1\% & +0.057 & 0.119 & [-0.268, +0.248] & 15/20 \\
+0.50 & Log bulk (KVRH) & chem OOD & Rank & 5\% & +0.034 & 0.059 & [-0.137, +0.135] & 16/20 \\
+0.50 & MP gap & chem OOD & Magnitude & 0.5\% & -0.019 & 0.039 & [-0.086, +0.044] & 6/20 \\
+0.50 & MP gap & chem OOD & Magnitude & 1\% & -0.008 & 0.049 & [-0.091, +0.061] & 8/20 \\
+0.50 & MP gap & chem OOD & Magnitude & 5\% & +0.002 & 0.039 & [-0.064, +0.080] & 10/20 \\
+0.50 & MP gap & chem OOD & Rank & 0.5\% & -0.071 & 0.048 & [-0.162, +0.026] & 2/20 \\
+0.50 & MP gap & chem OOD & Rank & 1\% & -0.040 & 0.052 & [-0.141, +0.086] & 2/20 \\
+0.50 & MP gap & chem OOD & Rank & 5\% & +0.018 & 0.038 & [-0.041, +0.096] & 16/20 \\
+0.50 & MP gap & IID & Magnitude & 0.5\% & -0.016 & 0.027 & [-0.057, +0.029] & 7/20 \\
+0.50 & MP gap & IID & Magnitude & 1\% & -0.005 & 0.018 & [-0.039, +0.019] & 7/20 \\
+0.50 & MP gap & IID & Magnitude & 5\% & +0.007 & 0.012 & [-0.026, +0.020] & 15/20 \\
+0.50 & MP gap & IID & Rank & 0.5\% & -0.067 & 0.037 & [-0.155, +0.011] & 1/20 \\
+0.50 & MP gap & IID & Rank & 1\% & -0.041 & 0.035 & [-0.132, +0.020] & 3/20 \\
+0.50 & MP gap & IID & Rank & 5\% & +0.015 & 0.017 & [-0.020, +0.038] & 16/20 \\
+0.75 & Expt gap & IID & Magnitude & 0.5\% & +0.038 & 0.096 & [-0.146, +0.256] & 13/20 \\
+0.75 & Expt gap & IID & Magnitude & 1\% & +0.025 & 0.065 & [-0.086, +0.154] & 12/20 \\
+0.75 & Expt gap & IID & Magnitude & 5\% & +0.015 & 0.054 & [-0.061, +0.175] & 12/20 \\
+0.75 & Expt gap & IID & Rank & 0.5\% & -0.039 & 0.093 & [-0.243, +0.150] & 6/20 \\
+0.75 & Expt gap & IID & Rank & 1\% & -0.033 & 0.064 & [-0.129, +0.075] & 7/20 \\
+0.75 & Expt gap & IID & Rank & 5\% & +0.007 & 0.034 & [-0.065, +0.081] & 13/20 \\
+0.75 & Log bulk (KVRH) & chem OOD & Magnitude & 0.5\% & +0.006 & 0.127 & [-0.339, +0.232] & 12/20 \\
+0.75 & Log bulk (KVRH) & chem OOD & Magnitude & 1\% & -0.023 & 0.119 & [-0.357, +0.179] & 9/20 \\
+0.75 & Log bulk (KVRH) & chem OOD & Magnitude & 5\% & -0.095 & 0.090 & [-0.291, +0.033] & 4/20 \\
+0.75 & Log bulk (KVRH) & chem OOD & Rank & 0.5\% & +0.052 & 0.143 & [-0.176, +0.381] & 11/20 \\
+0.75 & Log bulk (KVRH) & chem OOD & Rank & 1\% & +0.058 & 0.106 & [-0.181, +0.238] & 14/20 \\
+0.75 & Log bulk (KVRH) & chem OOD & Rank & 5\% & +0.035 & 0.060 & [-0.121, +0.134] & 14/20 \\
+0.75 & MP gap & chem OOD & Magnitude & 0.5\% & -0.037 & 0.047 & [-0.119, +0.048] & 4/20 \\
+0.75 & MP gap & chem OOD & Magnitude & 1\% & -0.028 & 0.047 & [-0.106, +0.058] & 5/20 \\
+0.75 & MP gap & chem OOD & Magnitude & 5\% & -0.018 & 0.045 & [-0.088, +0.064] & 6/20 \\
+0.75 & MP gap & chem OOD & Rank & 0.5\% & -0.090 & 0.056 & [-0.241, +0.003] & 1/20 \\
+0.75 & MP gap & chem OOD & Rank & 1\% & -0.050 & 0.062 & [-0.200, +0.081] & 3/20 \\
+0.75 & MP gap & chem OOD & Rank & 5\% & +0.019 & 0.039 & [-0.058, +0.089] & 15/20 \\
+0.75 & MP gap & IID & Magnitude & 0.5\% & -0.038 & 0.043 & [-0.116, +0.031] & 5/20 \\
+0.75 & MP gap & IID & Magnitude & 1\% & -0.022 & 0.031 & [-0.088, +0.022] & 6/20 \\
+0.75 & MP gap & IID & Magnitude & 5\% & -0.007 & 0.016 & [-0.049, +0.018] & 7/20 \\
+0.75 & MP gap & IID & Rank & 0.5\% & -0.077 & 0.034 & [-0.153, -0.000] & 0/20 \\
+0.75 & MP gap & IID & Rank & 1\% & -0.047 & 0.033 & [-0.111, +0.009] & 2/20 \\
+0.75 & MP gap & IID & Rank & 5\% & +0.023 & 0.022 & [-0.015, +0.060] & 17/20 \\
+1.00 & Expt gap & IID & Magnitude & 0.5\% & +0.008 & 0.108 & [-0.171, +0.223] & 12/20 \\
+1.00 & Expt gap & IID & Magnitude & 1\% & +0.002 & 0.075 & [-0.111, +0.214] & 10/20 \\
+1.00 & Expt gap & IID & Magnitude & 5\% & -0.003 & 0.066 & [-0.096, +0.165] & 8/20 \\
+1.00 & Expt gap & IID & Rank & 0.5\% & -0.061 & 0.098 & [-0.253, +0.079] & 7/20 \\
+1.00 & Expt gap & IID & Rank & 1\% & -0.044 & 0.076 & [-0.182, +0.060] & 8/20 \\
+1.00 & Expt gap & IID & Rank & 5\% & +0.004 & 0.033 & [-0.051, +0.078] & 10/20 \\
+1.00 & Log bulk (KVRH) & chem OOD & Magnitude & 0.5\% & -0.028 & 0.168 & [-0.560, +0.220] & 9/20 \\
+1.00 & Log bulk (KVRH) & chem OOD & Magnitude & 1\% & -0.070 & 0.159 & [-0.535, +0.169] & 6/20 \\
+1.00 & Log bulk (KVRH) & chem OOD & Magnitude & 5\% & -0.147 & 0.098 & [-0.373, -0.006] & 0/20 \\
+1.00 & Log bulk (KVRH) & chem OOD & Rank & 0.5\% & +0.097 & 0.124 & [-0.209, +0.301] & 17/20 \\
+1.00 & Log bulk (KVRH) & chem OOD & Rank & 1\% & +0.087 & 0.102 & [-0.196, +0.267] & 19/20 \\
+1.00 & Log bulk (KVRH) & chem OOD & Rank & 5\% & +0.042 & 0.056 & [-0.117, +0.151] & 17/20 \\
+1.00 & MP gap & chem OOD & Magnitude & 0.5\% & -0.083 & 0.060 & [-0.182, -0.005] & 0/20 \\
+1.00 & MP gap & chem OOD & Magnitude & 1\% & -0.062 & 0.062 & [-0.144, +0.071] & 2/20 \\
+1.00 & MP gap & chem OOD & Magnitude & 5\% & -0.053 & 0.048 & [-0.132, +0.046] & 3/20 \\
+1.00 & MP gap & chem OOD & Rank & 0.5\% & -0.097 & 0.065 & [-0.251, +0.024] & 1/20 \\
+1.00 & MP gap & chem OOD & Rank & 1\% & -0.053 & 0.064 & [-0.214, +0.071] & 3/20 \\
+1.00 & MP gap & chem OOD & Rank & 5\% & +0.025 & 0.040 & [-0.048, +0.110] & 13/20 \\
+1.00 & MP gap & IID & Magnitude & 0.5\% & -0.062 & 0.051 & [-0.150, +0.035] & 3/20 \\
+1.00 & MP gap & IID & Magnitude & 1\% & -0.049 & 0.039 & [-0.127, +0.008] & 2/20 \\
+1.00 & MP gap & IID & Magnitude & 5\% & -0.039 & 0.024 & [-0.088, +0.001] & 2/20 \\
+1.00 & MP gap & IID & Rank & 0.5\% & -0.085 & 0.040 & [-0.140, +0.001] & 1/20 \\
+1.00 & MP gap & IID & Rank & 1\% & -0.055 & 0.036 & [-0.108, +0.007] & 2/20 \\
+1.00 & MP gap & IID & Rank & 5\% & +0.018 & 0.023 & [-0.030, +0.064] & 16/20 \\
+\end{longtable}

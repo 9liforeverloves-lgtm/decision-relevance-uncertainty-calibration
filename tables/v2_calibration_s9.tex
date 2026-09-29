@@ -1,0 +1,51 @@
+\setlength{\tabcolsep}{3.5pt}
+\footnotesize
+\begin{longtable}{@{}llllrrr@{}}
+\caption{V2 diagnostic-partition MACE by task, split, acquisition policy, and campaign condition.}\label{tab:v2_calibration}\\
+\toprule
+Task & Split & Policy & Condition & RAW MACE & LOCAL MACE & LOCAL $-$ RAW \\
+\midrule
+\endfirsthead
+\caption[]{V2 diagnostic-partition MACE by task, split, acquisition policy, and campaign condition. (continued)}\\
+\toprule
+Task & Split & Policy & Condition & RAW MACE & LOCAL MACE & LOCAL $-$ RAW \\
+\midrule
+\endhead
+\midrule\multicolumn{7}{r}{Continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+Expt. gap & IID & Rank & RAW & 0.055 & 0.062 & +0.008 \\
+Expt. gap & IID & Rank & LOCAL & 0.056 & 0.065 & +0.009 \\
+Expt. gap & IID & Magnitude & RAW & 0.055 & 0.064 & +0.009 \\
+Expt. gap & IID & Magnitude & LOCAL & 0.054 & 0.062 & +0.008 \\
+Expt. gap & Chem. OOD & Rank & RAW & 0.054 & 0.073 & +0.018 \\
+Expt. gap & Chem. OOD & Rank & LOCAL & 0.053 & 0.069 & +0.016 \\
+Expt. gap & Chem. OOD & Magnitude & RAW & 0.055 & 0.073 & +0.018 \\
+Expt. gap & Chem. OOD & Magnitude & LOCAL & 0.056 & 0.075 & +0.018 \\
+MP gap & IID & Rank & RAW & 0.030 & 0.048 & +0.018 \\
+MP gap & IID & Rank & LOCAL & 0.031 & 0.047 & +0.016 \\
+MP gap & IID & Magnitude & RAW & 0.031 & 0.047 & +0.016 \\
+MP gap & IID & Magnitude & LOCAL & 0.031 & 0.046 & +0.015 \\
+MP gap & Chem. OOD & Rank & RAW & 0.033 & 0.054 & +0.020 \\
+MP gap & Chem. OOD & Rank & LOCAL & 0.035 & 0.051 & +0.017 \\
+MP gap & Chem. OOD & Magnitude & RAW & 0.034 & 0.049 & +0.015 \\
+MP gap & Chem. OOD & Magnitude & LOCAL & 0.035 & 0.048 & +0.013 \\
+\shortstack{Log shear\\(GVRH)} & IID & Rank & RAW & 0.098 & 0.045 & -0.053 \\
+\shortstack{Log shear\\(GVRH)} & IID & Rank & LOCAL & 0.094 & 0.044 & -0.051 \\
+\shortstack{Log shear\\(GVRH)} & IID & Magnitude & RAW & 0.103 & 0.047 & -0.056 \\
+\shortstack{Log shear\\(GVRH)} & IID & Magnitude & LOCAL & 0.107 & 0.040 & -0.067 \\
+\shortstack{Log shear\\(GVRH)} & Chem. OOD & Rank & RAW & 0.077 & 0.051 & -0.026 \\
+\shortstack{Log shear\\(GVRH)} & Chem. OOD & Rank & LOCAL & 0.069 & 0.053 & -0.016 \\
+\shortstack{Log shear\\(GVRH)} & Chem. OOD & Magnitude & RAW & 0.086 & 0.048 & -0.038 \\
+\shortstack{Log shear\\(GVRH)} & Chem. OOD & Magnitude & LOCAL & 0.075 & 0.051 & -0.025 \\
+\shortstack{Log bulk\\(KVRH)} & IID & Rank & RAW & 0.095 & 0.042 & -0.053 \\
+\shortstack{Log bulk\\(KVRH)} & IID & Rank & LOCAL & 0.083 & 0.043 & -0.040 \\
+\shortstack{Log bulk\\(KVRH)} & IID & Magnitude & RAW & 0.101 & 0.043 & -0.058 \\
+\shortstack{Log bulk\\(KVRH)} & IID & Magnitude & LOCAL & 0.095 & 0.044 & -0.051 \\
+\shortstack{Log bulk\\(KVRH)} & Chem. OOD & Rank & RAW & 0.084 & 0.042 & -0.043 \\
+\shortstack{Log bulk\\(KVRH)} & Chem. OOD & Rank & LOCAL & 0.074 & 0.043 & -0.031 \\
+\shortstack{Log bulk\\(KVRH)} & Chem. OOD & Magnitude & RAW & 0.088 & 0.044 & -0.044 \\
+\shortstack{Log bulk\\(KVRH)} & Chem. OOD & Magnitude & LOCAL & 0.084 & 0.042 & -0.042 \\
+\end{longtable}
+\noindent\footnotesize Each row averages 20 seed runs; each run-level value averages four campaign stages. MACE is the mean absolute difference between empirical and nominal coverage on the fixed diagnostic partition at 50\%, 80\%, 90\%, and 95\%. This is an auxiliary descriptive diagnostic, not a target-pool utility endpoint.

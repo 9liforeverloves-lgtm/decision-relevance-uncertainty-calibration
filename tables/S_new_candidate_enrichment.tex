@@ -1,0 +1,54 @@
+\begin{tabular}{llllrrrrrrr}
+\toprule
+Task & Split & Policy & Tail & LOCAL-only $n$ & RAW-only $n$ & Both $n$ & LOCAL tail & RAW tail & $\Delta$ & Ratio \\
+\midrule
+Expt gap & chemical OOD & Magnitude & 0.5\% & 6116 & 6116 & 4924 & 0.014 & 0.012 & +0.002 & 1.15 \\
+Expt gap & chemical OOD & Magnitude & 1\% & 6116 & 6116 & 4924 & 0.026 & 0.024 & +0.002 & 1.09 \\
+Expt gap & chemical OOD & Magnitude & 5\% & 6116 & 6116 & 4924 & 0.129 & 0.115 & +0.014 & 1.12 \\
+Expt gap & IID & Magnitude & 0.5\% & 6132 & 6132 & 4908 & 0.011 & 0.011 & -0.000 & 0.97 \\
+Expt gap & IID & Magnitude & 1\% & 6132 & 6132 & 4908 & 0.022 & 0.025 & -0.003 & 0.90 \\
+Expt gap & IID & Magnitude & 5\% & 6132 & 6132 & 4908 & 0.128 & 0.126 & +0.003 & 1.02 \\
+Log shear (GVRH) & chemical OOD & Magnitude & 0.5\% & 16459 & 16459 & 9901 & 0.013 & 0.012 & +0.001 & 1.07 \\
+Log shear (GVRH) & chemical OOD & Magnitude & 1\% & 16459 & 16459 & 9901 & 0.027 & 0.026 & +0.001 & 1.03 \\
+Log shear (GVRH) & chemical OOD & Magnitude & 5\% & 16459 & 16459 & 9901 & 0.158 & 0.163 & -0.006 & 0.97 \\
+Log shear (GVRH) & IID & Magnitude & 0.5\% & 15676 & 15676 & 10704 & 0.014 & 0.013 & +0.001 & 1.04 \\
+Log shear (GVRH) & IID & Magnitude & 1\% & 15676 & 15676 & 10704 & 0.029 & 0.029 & -0.000 & 1.00 \\
+Log shear (GVRH) & IID & Magnitude & 5\% & 15676 & 15676 & 10704 & 0.150 & 0.161 & -0.011 & 0.93 \\
+Log bulk (KVRH) & chemical OOD & Magnitude & 0.5\% & 18438 & 18438 & 7922 & 0.018 & 0.018 & +0.000 & 1.02 \\
+Log bulk (KVRH) & chemical OOD & Magnitude & 1\% & 18438 & 18438 & 7922 & 0.038 & 0.037 & +0.001 & 1.02 \\
+Log bulk (KVRH) & chemical OOD & Magnitude & 5\% & 18438 & 18438 & 7922 & 0.164 & 0.192 & -0.028 & 0.86 \\
+Log bulk (KVRH) & IID & Magnitude & 0.5\% & 17886 & 17886 & 8494 & 0.016 & 0.015 & +0.001 & 1.04 \\
+Log bulk (KVRH) & IID & Magnitude & 1\% & 17886 & 17886 & 8494 & 0.032 & 0.031 & +0.001 & 1.02 \\
+Log bulk (KVRH) & IID & Magnitude & 5\% & 17886 & 17886 & 8494 & 0.164 & 0.189 & -0.025 & 0.87 \\
+MP gap & chemical OOD & Magnitude & 0.5\% & 138869 & 138869 & 115811 & 0.012 & 0.013 & -0.001 & 0.95 \\
+MP gap & chemical OOD & Magnitude & 1\% & 138869 & 138869 & 115811 & 0.028 & 0.029 & -0.001 & 0.96 \\
+MP gap & chemical OOD & Magnitude & 5\% & 138869 & 138869 & 115811 & 0.177 & 0.177 & +0.001 & 1.00 \\
+MP gap & IID & Magnitude & 0.5\% & 127149 & 127149 & 127511 & 0.012 & 0.012 & +0.000 & 1.04 \\
+MP gap & IID & Magnitude & 1\% & 127149 & 127149 & 127511 & 0.027 & 0.026 & +0.001 & 1.03 \\
+MP gap & IID & Magnitude & 5\% & 127149 & 127149 & 127511 & 0.169 & 0.164 & +0.005 & 1.03 \\
+Expt gap & chemical OOD & Rank & 0.5\% & 6266 & 6266 & 4774 & 0.010 & 0.012 & -0.002 & 0.86 \\
+Expt gap & chemical OOD & Rank & 1\% & 6266 & 6266 & 4774 & 0.022 & 0.026 & -0.004 & 0.85 \\
+Expt gap & chemical OOD & Rank & 5\% & 6266 & 6266 & 4774 & 0.124 & 0.124 & +0.001 & 1.01 \\
+Expt gap & IID & Rank & 0.5\% & 5966 & 5966 & 5074 & 0.008 & 0.010 & -0.002 & 0.83 \\
+Expt gap & IID & Rank & 1\% & 5966 & 5966 & 5074 & 0.017 & 0.020 & -0.003 & 0.85 \\
+Expt gap & IID & Rank & 5\% & 5966 & 5966 & 5074 & 0.123 & 0.124 & -0.001 & 0.99 \\
+Log shear (GVRH) & chemical OOD & Rank & 0.5\% & 15992 & 15992 & 10368 & 0.014 & 0.012 & +0.002 & 1.17 \\
+Log shear (GVRH) & chemical OOD & Rank & 1\% & 15992 & 15992 & 10368 & 0.029 & 0.024 & +0.005 & 1.22 \\
+Log shear (GVRH) & chemical OOD & Rank & 5\% & 15992 & 15992 & 10368 & 0.148 & 0.137 & +0.011 & 1.08 \\
+Log shear (GVRH) & IID & Rank & 0.5\% & 15037 & 15037 & 11343 & 0.011 & 0.010 & +0.001 & 1.15 \\
+Log shear (GVRH) & IID & Rank & 1\% & 15037 & 15037 & 11343 & 0.023 & 0.021 & +0.002 & 1.11 \\
+Log shear (GVRH) & IID & Rank & 5\% & 15037 & 15037 & 11343 & 0.122 & 0.119 & +0.003 & 1.03 \\
+Log bulk (KVRH) & chemical OOD & Rank & 0.5\% & 16644 & 16644 & 9716 & 0.016 & 0.014 & +0.002 & 1.18 \\
+Log bulk (KVRH) & chemical OOD & Rank & 1\% & 16644 & 16644 & 9716 & 0.031 & 0.026 & +0.004 & 1.16 \\
+Log bulk (KVRH) & chemical OOD & Rank & 5\% & 16644 & 16644 & 9716 & 0.137 & 0.124 & +0.013 & 1.11 \\
+Log bulk (KVRH) & IID & Rank & 0.5\% & 16306 & 16306 & 10074 & 0.013 & 0.011 & +0.002 & 1.21 \\
+Log bulk (KVRH) & IID & Rank & 1\% & 16306 & 16306 & 10074 & 0.028 & 0.023 & +0.005 & 1.21 \\
+Log bulk (KVRH) & IID & Rank & 5\% & 16306 & 16306 & 10074 & 0.125 & 0.116 & +0.009 & 1.08 \\
+MP gap & chemical OOD & Rank & 0.5\% & 161629 & 161629 & 93051 & 0.013 & 0.015 & -0.002 & 0.86 \\
+MP gap & chemical OOD & Rank & 1\% & 161629 & 161629 & 93051 & 0.026 & 0.031 & -0.004 & 0.87 \\
+MP gap & chemical OOD & Rank & 5\% & 161629 & 161629 & 93051 & 0.161 & 0.168 & -0.007 & 0.96 \\
+MP gap & IID & Rank & 0.5\% & 145201 & 145201 & 109459 & 0.015 & 0.015 & -0.001 & 0.96 \\
+MP gap & IID & Rank & 1\% & 145201 & 145201 & 109459 & 0.030 & 0.030 & -0.000 & 1.00 \\
+MP gap & IID & Rank & 5\% & 145201 & 145201 & 109459 & 0.165 & 0.160 & +0.005 & 1.03 \\
+\bottomrule
+\end{tabular}

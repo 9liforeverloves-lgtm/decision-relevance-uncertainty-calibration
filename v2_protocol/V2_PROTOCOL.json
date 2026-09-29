@@ -1,0 +1,175 @@
+{
+  "protocol_id": "MLST_decision_relevance_robustness_v2_1_20260927",
+  "status": "operationally_amended_before_full_v2_results",
+  "amendment": "V2.1 only replaces non-deterministic Python object-memory hashing in state_fingerprint with canonical UTF-8 material IDs and little-endian float64 arrays. No data, feature, split, seed, model, acquisition, calibration, endpoint, or inferential setting changed. The initial dry-run showed identical candidate IDs, predictions, uncertainties, and queried-ID hashes across repeats; only the diagnostic fingerprint differed.",
+  "analysis_class": "SECONDARY ROBUSTNESS ANALYSIS (V2)",
+  "frozen_local_date": "2026-09-27",
+  "primary_boundary": "The old 3216-record V5 confirmation is read-only; V2 has a distinct data snapshot, namespace, seeds, and output directories.",
+  "data_manifest_sha256": "b6d38d3a977dc2756cab9add5f107387539904ce07bd3fbd90d7dc64f57978fb",
+  "datasets": {
+    "matbench_expt_gap": "82812f5cbea6c4358487420461761388e73c977a3d5adb02134d8004ea57274e",
+    "matbench_mp_gap": "686446bbd09946f470127a1b2364bd17486a3eb07424461735100cf3f4dd8012",
+    "matbench_log_gvrh": "7dd19f9e4160e078170921417fa48ab2db4756b888dd99e7a152aeb2d235d34b",
+    "matbench_log_kvrh": "edf6db8f9d8ac4b51aa1e3148d1058f479140a3e5db3ba11e6821245a62adb29"
+  },
+  "membership_path": "manifests/v2_split_membership.parquet",
+  "membership_sha256": "5ec8f91273aae461d8830ddbd9647b6a828b3fe3067068e192b80c04f5a26712",
+  "tasks": [
+    "matbench_expt_gap",
+    "matbench_mp_gap",
+    "matbench_log_gvrh",
+    "matbench_log_kvrh"
+  ],
+  "splits": [
+    "iid_record",
+    "chemical_system_ood"
+  ],
+  "seeds": [
+    2026092600,
+    2026092601,
+    2026092602,
+    2026092603,
+    2026092604,
+    2026092605,
+    2026092606,
+    2026092607,
+    2026092608,
+    2026092609,
+    2026092610,
+    2026092611,
+    2026092612,
+    2026092613,
+    2026092614,
+    2026092615,
+    2026092616,
+    2026092617,
+    2026092618,
+    2026092619
+  ],
+  "seed_count": 20,
+  "policies": [
+    "rank",
+    "magnitude"
+  ],
+  "conditions": [
+    "RAW",
+    "LOCAL"
+  ],
+  "full_run_count": 640,
+  "dry_run": {
+    "task": "matbench_mp_gap",
+    "split": "iid_record",
+    "seeds": [
+      2026092600,
+      2026092601
+    ],
+    "policies": [
+      "rank",
+      "magnitude"
+    ],
+    "conditions": [
+      "RAW",
+      "LOCAL"
+    ],
+    "repeatability_canary": "Repeat all four condition-policy trajectories for seed 2026092600 under distinct artifact IDs."
+  },
+  "partition": {
+    "source_fraction": 0.2,
+    "diagnostic_fraction": 0.2,
+    "target_fraction": 0.6,
+    "minimum_source": 30,
+    "minimum_target": 50,
+    "minimum_diagnostic": 20
+  },
+  "features": {
+    "library": "pymatgen",
+    "version": "2024.10.29",
+    "implementation": "Pymatgen Composition; sorted dataset-wide element fractions plus total atoms and distinct-element count; float64; fill missing values with zero; reject non-finite values; no scaling or feature selection."
+  },
+  "surrogate": {
+    "family": "sklearn.ensemble.RandomForestRegressor",
+    "n_estimators": 80,
+    "min_samples_leaf": 2,
+    "max_features": 1.0,
+    "bootstrap": true,
+    "n_jobs": 1,
+    "raw_uncertainty": "population standard deviation (ddof=0) over tree predictions",
+    "oob": "per-tree predictions only for rows excluded from that tree bootstrap sample; minimum 3 OOB trees for residual calibration"
+  },
+  "local_calibration": {
+    "algorithm": "archived core.Calibrator corrected local scale",
+    "calibrator": "ExtraTreesRegressor(n_estimators=64,min_samples_leaf=5,max_features=1.0)",
+    "target": "log(abs(y_oob-mu_oob)/max(sigma_oob,1e-8)+1e-8)",
+    "crossfit": "5 folds ordered by SHA-256 of stable material ID; fold seeds derive from campaign seed and stage",
+    "normalization": "median(q/exp(g_oof))/0.67448975",
+    "clip": [
+      0.25,
+      4.0
+    ],
+    "global_scale": "median valid OOB absolute residual ratio / 0.67448975",
+    "interpolation_alpha": 0.5,
+    "corrected_sigma": "max(raw_sigma,1e-8)*exp((1-alpha)*log(global_scale)+alpha*log(local_scale))"
+  },
+  "acquisition": {
+    "rank": "percentile_rank(mu)+percentile_rank(sigma); ties by ascending material_id",
+    "magnitude": "mu+sigma; ties by ascending material_id",
+    "beta": 1.0
+  },
+  "campaign": {
+    "initial_count": "max(30, round(0.01 * task_rows)), capped at source size",
+    "query_budget": "max(1, round(0.20 * target_rows))",
+    "batches": "four integer-balanced sequential batches summing exactly to query_budget",
+    "initial_source_sample": "numpy.default_rng(seed), without replacement, sorted by row index"
+  },
+  "outcomes": {
+    "primary_v2_metric": "query-order trapezoidal integrated recall for target top 1%",
+    "tail_sensitivity": [
+      0.005,
+      0.01,
+      0.05
+    ],
+    "same_trajectory_postprocessing": true,
+    "summary": "paired seed distributions; mean, median, SD, range, positive fraction; no V2 p-values"
+  },
+  "candidate_state_fields": [
+    "run_id",
+    "task",
+    "split",
+    "seed",
+    "stage",
+    "material_id",
+    "true_y_retrospective",
+    "predicted_mu",
+    "raw_sigma",
+    "calibration_multiplier",
+    "local_scale",
+    "corrected_sigma_alpha_0p5",
+    "predicted_value_rank",
+    "uncertainty_rank_raw",
+    "acquisition_score",
+    "acquisition_rank",
+    "selected_flag",
+    "query_order",
+    "top_tail_0p5",
+    "top_tail_1",
+    "top_tail_5",
+    "state_fingerprint"
+  ],
+  "leakage_controls": [
+    "target labels are not passed to model fitting, calibration, or acquisition",
+    "diagnostic labels are used only for descriptive MACE after selection",
+    "candidate truth/tail labels are attached after acquisition ranking and batch selection",
+    "source, diagnostic, and target memberships are disjoint; chemical-system OOD groups are disjoint"
+  ],
+  "retry_policy": "Only retry a failed row with identical protocol, config, seed, and output identity; record each attempt. No silent exclusions.",
+  "beta_alpha_grid": "not planned; do not run absent a prespecified ambiguity from the second-surrogate or tail analyses",
+  "code_sha256": {
+    "code/build_v2_snapshot.py": "181597fd980d2fa63fe1a523796693b589522f45ddd3c1e566faee9f4910ddd4",
+    "code/freeze_v2_protocol.py": "cf0454f195356ff0815db2d8ae1030ff5e7810f645000fc8fc1644bbc7dd3588",
+    "code/run_v2_campaign.py": "a8858eac8f1d3c1ce3b2f05d6833f69c33778cf035e721729dbaab441b6f75d3",
+    "code/transportability/data.py": "1650fafc184036c5142967271a64678dfa838211be2f7b22f9781d2979ed97b7",
+    "code/transportability/splits.py": "5b77743a16ba88c04e103ff388164e1b49182fa97c529a4794a8a451a27f56ab",
+    "code/decision_relevance/local_calibration_reference.py": "aff146be472546a35daf590cd54fb062047a0cfd4e387b93e61dd1c1a3095a03",
+    "code/reference/core_calibration_reference.py": "84e364e6a6671f9b5ef3a563cb7c93fc1a321f01f05c64ce52a8277f50f72111"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "protocol_id": "MLST_decision_relevance_alpha_sensitivity_v1_20260927",
+  "status": "frozen_before_alpha_reruns",
+  "analysis_class": "SECONDARY ALPHA-SENSITIVITY ANALYSIS",
+  "purpose": "Evaluate whether the qualitative task/policy pattern is sensitive to the fixed LOCAL interpolation exponent; not alpha optimization.",
+  "source_v2_protocol_sha256": "16850cceb69b6eac30e5b7ca164793ad296f8684b84b97f9345d68cb42c2b5ab",
+  "source_v2_protocol_id": "MLST_decision_relevance_robustness_v2_1_20260927",
+  "source_v2_runner_sha256": "a8858eac8f1d3c1ce3b2f05d6833f69c33778cf035e721729dbaab441b6f75d3",
+  "alpha_driver_sha256": "bf59593ce92c3e506dc084d4e1d88d645cc6f554a1b71c3f9a2210648a8f16fe",
+  "source_data_hashes": {
+    "v2_protocol_json_sha256": "16850cceb69b6eac30e5b7ca164793ad296f8684b84b97f9345d68cb42c2b5ab",
+    "v2_runner_sha256": "a8858eac8f1d3c1ce3b2f05d6833f69c33778cf035e721729dbaab441b6f75d3",
+    "v2_data_manifest_sha256": "b6d38d3a977dc2756cab9add5f107387539904ce07bd3fbd90d7dc64f57978fb",
+    "v2_split_membership_sha256": "5ec8f91273aae461d8830ddbd9647b6a828b3fe3067068e192b80c04f5a26712",
+    "v2_dataset_files": {
+      "matbench_expt_gap__materials.csv": "82812f5cbea6c4358487420461761388e73c977a3d5adb02134d8004ea57274e",
+      "matbench_log_gvrh__materials.csv": "7dd19f9e4160e078170921417fa48ab2db4756b888dd99e7a152aeb2d235d34b",
+      "matbench_log_kvrh__materials.csv": "edf6db8f9d8ac4b51aa1e3148d1058f479140a3e5db3ba11e6821245a62adb29",
+      "matbench_mp_gap__materials.csv": "686446bbd09946f470127a1b2364bd17486a3eb07424461735100cf3f4dd8012"
+    }
+  },
+  "alphas": [
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "representative_environments": [
+    {
+      "task": "matbench_expt_gap",
+      "split": "iid_record"
+    },
+    {
+      "task": "matbench_mp_gap",
+      "split": "iid_record"
+    },
+    {
+      "task": "matbench_mp_gap",
+      "split": "chemical_system_ood"
+    },
+    {
+      "task": "matbench_log_kvrh",
+      "split": "chemical_system_ood"
+    }
+  ],
+  "policies": [
+    "rank",
+    "magnitude"
+  ],
+  "seeds": [
+    2026092600,
+    2026092601,
+    2026092602,
+    2026092603,
+    2026092604,
+    2026092605,
+    2026092606,
+    2026092607,
+    2026092608,
+    2026092609,
+    2026092610,
+    2026092611,
+    2026092612,
+    2026092613,
+    2026092614,
+    2026092615,
+    2026092616,
+    2026092617,
+    2026092618,
+    2026092619
+  ],
+  "seed_count": 20,
+  "local_trajectory_count": 640,
+  "raw_baseline_count": 160,
+  "implementation_canary": "One alpha=0.50 magnitude trajectory was run after the initial dry protocol was written to validate the independent runner. It is retained separately under the revision root, excluded from the 640-run main manifest, and the finalized driver hash is frozen in this protocol.",
+  "raw_baseline": "Reuse the matching RAW trajectories from the fully verified V2.1 campaign; the RAW rule does not depend on alpha. Verify their hashes from alpha_raw_baseline_manifest.csv before analysis.",
+  "alpha_0p5": "Rerun sequentially as an independent sensitivity trajectory and compare against the frozen V2 LOCAL trajectory for exact reproducibility; do not replace either record.",
+  "fixed_settings_inherited_from_v2": {
+    "data_snapshot": "identical frozen D-drive V2.1 snapshots",
+    "split_membership": "identical frozen V2 split file",
+    "surrogate": "RandomForestRegressor, 80 trees, min_samples_leaf=2, max_features=1.0, bootstrap, n_jobs=1",
+    "oob_residual_ratio": "identical V2.1 implementation",
+    "scale_model": "ExtraTreesRegressor, 64 trees, min_samples_leaf=5, max_features=1.0",
+    "normalization": "five-fold stable-ID OOF median normalization against 0.67448975",
+    "clip": [
+      0.25,
+      4.0
+    ],
+    "acquisition": "rank=percentile(mu)+percentile(sigma); magnitude=mu+sigma; ties by stable ID",
+    "schedule": "four sequential updates; same initial labels, query budget and deterministic seed derivation",
+    "target_tails": [
+      0.005,
+      0.01,
+      0.05
+    ]
+  },
+  "sequential_replay_requirement": "Each alpha gets a fresh campaign; never rescore or replay stored alpha=0.5 candidate states as another alpha.",
+  "aggregation": "Environment-level and equal-weight average over the four prespecified environments within each of 20 paired V2 seeds; report seed SD, observed range and positive-seed count descriptively; no inferential tests.",
+  "calibration_metric": "mean diagnostic-partition MACE over the same four stages; descriptive only.",
+  "outputs": [
+    "alpha_sensitivity_run_manifest.csv",
+    "alpha_sensitivity_summary.csv",
+    "alpha_sensitivity.pdf",
+    "supplementary_alpha_table.csv"
+  ],
+  "frozen_primary_boundary": "No primary confirmation records, estimates, inference, Table 1 values, V2.1 protocol, V2.1 run manifest or V2.1 outputs are modified."
+}
